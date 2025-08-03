@@ -1,14 +1,23 @@
-[gd_scene load_steps=19 format=3 uid="uid://d3h7eqgdb8th4"]
+[gd_scene load_steps=22 format=3 uid="uid://d3h7eqgdb8th4"]
 
 [ext_resource type="Script" uid="uid://bb2yy3uhtw83d" path="res://Scripts/playerMovement.gd" id="1_cvnsp"]
 [ext_resource type="Texture2D" uid="uid://cfyywj0b1eecw" path="res://Assets/Player/Idle.png" id="1_v0iea"]
 [ext_resource type="Texture2D" uid="uid://b1sm4qjppq831" path="res://Assets/Player/Air Idle.png" id="2_fkybt"]
 [ext_resource type="Texture2D" uid="uid://bgno6id32lw4x" path="res://Assets/Player/Walk.png" id="3_6t5aa"]
 [ext_resource type="Texture2D" uid="uid://sxwv1tbwbew1" path="res://Assets/Player/Jump.png" id="3_vgqql"]
+[ext_resource type="Texture2D" uid="uid://bjp76kav8m0rd" path="res://Assets/Player/Hurt.png" id="3_x3wgy"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pu2lt"]
 atlas = ExtResource("2_fkybt")
 region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ukyrk"]
+atlas = ExtResource("3_x3wgy")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7dp3o"]
+atlas = ExtResource("3_x3wgy")
+region = Rect2(64, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cvnsp"]
 atlas = ExtResource("1_v0iea")
@@ -58,12 +67,18 @@ animations = [{
 }],
 "loop": true,
 "name": &"AirIdle",
-"speed": 5.0
+"speed": 10.0
 }, {
-"frames": [],
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ukyrk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7dp3o")
+}],
 "loop": true,
-"name": &"Fall",
-"speed": 5.0
+"name": &"Die",
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -120,11 +135,15 @@ script = ExtResource("1_cvnsp")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_vgqql")
-animation = &"AirIdle"
+animation = &"Idle"
 autoplay = "Idle"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 1.5)
 shape = SubResource("RectangleShape2D_fkybt")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="Timer1" type="Timer" parent="."]
+wait_time = 0.3
+one_shot = true
+
+[connection signal="timeout" from="Timer1" to="." method="_on_timer_timeout"]

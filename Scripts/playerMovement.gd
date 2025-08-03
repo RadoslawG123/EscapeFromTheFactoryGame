@@ -1,9 +1,10 @@
 extends CharacterBody2D
 
 @export var SPEED = 10400
-@export var JUMP_VELOCITY = -32000
+@export var JUMP_VELOCITY = -30000
+@export var JUMPPAD_VELOCITY = -38000
 @export var START_GRAVITY = 1700
-@export var COYOTE_TIME = 140 # in ms
+@export var COYOTE_TIME = 100 # in ms
 @export var JUMP_BUFFER_TIME = 100 # in ms
 @export var JUMP_CUT_MULTIPLIER = 0.4
 @export var AIR_HANG_MULTIPLIER = 0.93
@@ -12,12 +13,16 @@ extends CharacterBody2D
 @export var AIR_X_SMOOTHING = 0.1
 @export var MAX_FALL_SPEED = 25000
 
+@export var tile_map: TileMap
+
+@onready var timer1: Timer = $Timer1
 @onready var sprite: AnimatedSprite2D = $"AnimatedSprite2D"
-@onready var animPlayer: AnimationPlayer = $"AnimationPlayer"
+
 
 enum States {
 	IDLE,
-	RUN,JUMP,
+	RUN,
+	JUMP,
 	AIR,
 	DEAD,
 }
@@ -28,13 +33,20 @@ var lastFloorMsec = 0
 var wasOnFloor = false
 var lastJumpQueueMsec: int
 var gravity = START_GRAVITY
+var onTheSpikes = false
+var jumpPadActivate = false
 
 func _ready():
 	set_meta("tag", "player")
 
 func _physics_process(delta):
-	#print(state)
 	var direction = Input.get_axis("move_left", "move_right")
+
+	# Spikes
+	var tile_pos = tile_map.local_to_map(global_position)
+	var tile_data = tile_map.get_cell_tile_data(0, tile_pos)
+	if tile_data and tile_data.get_custom_data("Spikes") == true and onTheSpikes == false:
+		die()
 
 	if is_on_floor():
 		lastFloorMsec = Time.get_ticks_msec()
@@ -44,25 +56,33 @@ func _physics_process(delta):
 	
 	match state:
 		States.JUMP:
-			velocity.y = JUMP_VELOCITY * delta
+			if not jumpPadActivate:
+				velocity.y = JUMP_VELOCITY * delta
+			else:
+				velocity.y = JUMPPAD_VELOCITY * delta
 			sprite.play("Jump")
 			#animPlayer.stop()
 			#animPlayer.play("jump")
 			state = States.AIR
 		States.AIR:
 			if is_on_floor():
+				jumpPadActivate = false
 				state = States.IDLE
 				#animPlayer.play("idle") #land
+				
 			if Input.is_action_just_released("jump"):
 				sprite.play("AirIdle")
 				velocity.y *= JUMP_CUT_MULTIPLIER
+				
 			run(direction, delta)
 			velocity.x = lerp(prevVelocity.x, velocity.x, AIR_X_SMOOTHING)
+			
 			if Input.is_action_just_pressed("jump"):
-				if Time.get_ticks_msec() - lastFloorMsec < COYOTE_TIME:
+				if Time.get_ticks_msec() - lastFloorMsec < COYOTE_TIME and not jumpPadActivate:
 					state = States.JUMP
 				else:
 					lastJumpQueueMsec = Time.get_ticks_msec()
+					
 			velocity.y += gravity * delta
 			if abs(velocity.y) < AIR_HANG_THRESHOLD:
 				gravity *= AIR_HANG_MULTIPLIER
@@ -86,9 +106,13 @@ func _physics_process(delta):
 			elif Input.is_action_just_pressed("jump"): 
 				state = States.JUMP
 		States.DEAD:
-			pass
+			velocity.x = 0
+			velocity.y = 0
 
-	velocity.y = lerp(prevVelocity.y, velocity.y, Y_SMOOTHING)
+	if not jumpPadActivate:
+		velocity.y = lerp(prevVelocity.y, velocity.y, Y_SMOOTHING)
+	else:
+		velocity.y = lerp(velocity.y, velocity.y, 0.1)
 	
 	velocity.y = min(velocity.y, MAX_FALL_SPEED * delta)
 	
@@ -97,15 +121,20 @@ func _physics_process(delta):
 	
 	move_and_slide()
 	
-	
 func run(direction, delta):
 	velocity.x = SPEED * direction * delta
 	if not direction == 0:
 		sprite.flip_h = direction < 0
 	
 func die():
+	onTheSpikes = true
 	state = States.DEAD
-	velocity.x = 0
-	velocity.y = 0
-	#sprite.stop()
-	#sprite.play("dead")
+	sprite.play("Die")
+	timer1.start()
+
+func jump_pad():
+	jumpPadActivate = true
+	state = States.JUMP
+
+func _on_timer_timeout() -> void:
+	get_tree().reload_current_scene()
