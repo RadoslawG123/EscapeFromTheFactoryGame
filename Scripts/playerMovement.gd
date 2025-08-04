@@ -1,17 +1,17 @@
 extends CharacterBody2D
 
-@export var SPEED = 10400
-@export var JUMP_VELOCITY = -30000
-@export var JUMPPAD_VELOCITY = -38000
-@export var START_GRAVITY = 1700
-@export var COYOTE_TIME = 100 # in ms
-@export var JUMP_BUFFER_TIME = 100 # in ms
-@export var JUMP_CUT_MULTIPLIER = 0.4
-@export var AIR_HANG_MULTIPLIER = 0.93
-@export var AIR_HANG_THRESHOLD = 50
-@export var Y_SMOOTHING = 0.8
-@export var AIR_X_SMOOTHING = 0.1
-@export var MAX_FALL_SPEED = 25000
+@export var SPEED := 10400
+@export var JUMP_VELOCITY := -30000
+@export var JUMPPAD_VELOCITY := -38000
+@export var START_GRAVITY := 1700
+@export var COYOTE_TIME := 100 # in ms
+@export var JUMP_BUFFER_TIME := 100 # in ms
+@export var JUMP_CUT_MULTIPLIER := 0.4
+@export var AIR_HANG_MULTIPLIER := 0.93
+@export var AIR_HANG_THRESHOLD := 50
+@export var Y_SMOOTHING := 0.8
+@export var AIR_X_SMOOTHING := 0.1
+@export var MAX_FALL_SPEED := 25000
 
 @export var tile_map: TileMap
 
@@ -28,13 +28,14 @@ enum States {
 }
 
 @onready var state: States = States.AIR
-var prevVelocity = Vector2.ZERO
-var lastFloorMsec = 0
-var wasOnFloor = false
+var prevVelocity := Vector2.ZERO
+var lastFloorMsec := 0
+var wasOnFloor := false
 var lastJumpQueueMsec: int
-var gravity = START_GRAVITY
-var onTheSpikes = false
-var jumpPadActivate = false
+var gravity: int = START_GRAVITY
+var onTheSpikes := false
+var jumpPadActivate := false
+var doubleJumpActive := true
 
 func _ready():
 	set_meta("tag", "player")
@@ -58,27 +59,35 @@ func _physics_process(delta):
 		States.JUMP:
 			if not jumpPadActivate:
 				velocity.y = JUMP_VELOCITY * delta
+				if not doubleJumpActive:
+					sprite.play("Jump")
+				else:
+					sprite.play("AirIdle")
 			else:
 				velocity.y = JUMPPAD_VELOCITY * delta
-			sprite.play("Jump")
+				sprite.play("Jump")
 			#animPlayer.stop()
 			#animPlayer.play("jump")
 			state = States.AIR
 		States.AIR:
 			if is_on_floor():
 				jumpPadActivate = false
+				doubleJumpActive = true
 				state = States.IDLE
 				#animPlayer.play("idle") #land
 				
 			if Input.is_action_just_released("jump"):
-				sprite.play("AirIdle")
 				velocity.y *= JUMP_CUT_MULTIPLIER
 				
 			run(direction, delta)
 			velocity.x = lerp(prevVelocity.x, velocity.x, AIR_X_SMOOTHING)
 			
 			if Input.is_action_just_pressed("jump"):
-				if Time.get_ticks_msec() - lastFloorMsec < COYOTE_TIME and not jumpPadActivate:
+				# Coyote Time
+				if Time.get_ticks_msec() - lastFloorMsec < COYOTE_TIME and not jumpPadActivate and not doubleJumpActive:
+					state = States.JUMP
+				elif doubleJumpActive and not jumpPadActivate:
+					doubleJumpActive = false
 					state = States.JUMP
 				else:
 					lastJumpQueueMsec = Time.get_ticks_msec()

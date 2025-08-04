@@ -123,7 +123,7 @@ tile_map = NodePath("../TileMap")
 
 [node name="Camera2D" type="Camera2D" parent="Player"]
 position = Vector2(1, 6)
-zoom = Vector2(4, 4)
+zoom = Vector2(3.5, 3.5)
 limit_bottom = 100
 limit_smoothed = true
 position_smoothing_enabled = true
@@ -135,7 +135,7 @@ layer_0/tile_data = PackedInt32Array(0, 65536, 1, 65535, 65536, 1, 1, 65536, 1, 
 script = SubResource("GDScript_wrm1d")
 
 [node name="Killzone" parent="." instance=ExtResource("3_wrm1d")]
-position = Vector2(32, 62)
+position = Vector2(63, 49)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Killzone"]
 shape = SubResource("WorldBoundaryShape2D_3dryh")
