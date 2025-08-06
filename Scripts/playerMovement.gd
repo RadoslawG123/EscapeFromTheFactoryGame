@@ -12,11 +12,15 @@ extends CharacterBody2D
 @export var Y_SMOOTHING := 0.8
 @export var AIR_X_SMOOTHING := 0.1
 @export var MAX_FALL_SPEED := 25000
+@export var WALL_SLIDE_FALL_SPEED := 3000
 
 @export var tile_map: TileMap
 
 @onready var timer1: Timer = $Timer1
 @onready var sprite: AnimatedSprite2D = $"AnimatedSprite2D"
+@onready var ray_cast_right: RayCast2D = $RayCastRight
+@onready var ray_cast_left: RayCast2D = $RayCastLeft
+@onready var ray_cast_down: RayCast2D = $RayCastDown
 
 
 enum States {
@@ -25,6 +29,7 @@ enum States {
 	JUMP,
 	AIR,
 	DEAD,
+	WALL
 }
 
 @onready var state: States = States.AIR
@@ -36,12 +41,19 @@ var gravity: int = START_GRAVITY
 var onTheSpikes := false
 var jumpPadActivate := false
 var doubleJumpActive := true
+var right_wall := false
+var left_wall := false
 
 func _ready():
 	set_meta("tag", "player")
 
 func _physics_process(delta):
 	var direction = Input.get_axis("move_left", "move_right")
+	if state == States.WALL:
+		if ray_cast_right.is_colliding():
+			direction = 1
+		else:
+			direction = -1
 
 	# Spikes
 	var tile_pos = tile_map.local_to_map(global_position)
@@ -51,11 +63,12 @@ func _physics_process(delta):
 
 	if is_on_floor():
 		lastFloorMsec = Time.get_ticks_msec()
-	elif state != States.JUMP and state != States.AIR and state != States.DEAD:
+	elif state != States.JUMP and state != States.AIR and state != States.DEAD and state != States.WALL:
 		state = States.AIR
 		sprite.play("Jump") #fall
 	
 	match state:
+		# JUMP
 		States.JUMP:
 			if not jumpPadActivate:
 				velocity.y = JUMP_VELOCITY * delta
@@ -69,13 +82,22 @@ func _physics_process(delta):
 			#animPlayer.stop()
 			#animPlayer.play("jump")
 			state = States.AIR
+			
+		# Air
 		States.AIR:
 			if is_on_floor():
 				jumpPadActivate = false
 				doubleJumpActive = true
 				state = States.IDLE
 				#animPlayer.play("idle") #land
-				
+				#print("Collision", velocity.y)
+			elif Input.is_action_pressed("move_right") and ray_cast_right.is_colliding() and not ray_cast_down.is_colliding():
+				right_wall = true
+				state = States.WALL
+			elif Input.is_action_pressed("move_left") and ray_cast_left.is_colliding() and not ray_cast_down.is_colliding():
+				left_wall = true
+				state = States.WALL
+			
 			if Input.is_action_just_released("jump"):
 				velocity.y *= JUMP_CUT_MULTIPLIER
 				
@@ -91,12 +113,14 @@ func _physics_process(delta):
 					state = States.JUMP
 				else:
 					lastJumpQueueMsec = Time.get_ticks_msec()
-					
+			
 			velocity.y += gravity * delta
 			if abs(velocity.y) < AIR_HANG_THRESHOLD:
 				gravity *= AIR_HANG_MULTIPLIER
 			else:
 				gravity = START_GRAVITY
+				
+		# IDLE
 		States.IDLE:
 			if Time.get_ticks_msec() - lastJumpQueueMsec < JUMP_BUFFER_TIME or Input.is_action_just_pressed("jump"): # jump buffer
 				state = States.JUMP
@@ -106,6 +130,8 @@ func _physics_process(delta):
 				sprite.play("Idle")
 				if direction != 0:
 					state = States.RUN
+					
+		# RUN
 		States.RUN:
 			sprite.play("Run")
 			run(direction, delta)
@@ -114,6 +140,38 @@ func _physics_process(delta):
 				state = States.IDLE
 			elif Input.is_action_just_pressed("jump"): 
 				state = States.JUMP
+				
+		# WALL
+		States.WALL:
+			wall_slide(direction, delta)
+			if not ray_cast_right.is_colliding() and not ray_cast_left.is_colliding():
+				state = States.AIR
+				
+			if Input.is_action_just_released("move_right") and right_wall:
+				sprite.play("AirIdle")
+				right_wall = false
+				state = States.AIR
+			if Input.is_action_just_released("move_left") and left_wall:
+				sprite.play("AirIdle")
+				left_wall = false
+				state = States.AIR
+				
+			if right_wall and Input.is_action_just_pressed("jump"):
+				#sprite.play("AirIdle")
+				sprite.flip_h = direction < 0
+				velocity.x = SPEED*2 * -direction * delta
+				velocity.y = JUMP_VELOCITY * delta
+				right_wall = false
+				state = States.AIR
+			elif left_wall and Input.is_action_just_pressed("jump"):
+				#sprite.play("AirIdle")
+				sprite.flip_h = direction < 0
+				velocity.x = SPEED*2 * -direction * delta
+				velocity.y = JUMP_VELOCITY * delta
+				left_wall = false
+				state = States.AIR
+				
+		# DEAD
 		States.DEAD:
 			velocity.x = 0
 			velocity.y = 0
@@ -144,6 +202,12 @@ func die():
 func jump_pad():
 	jumpPadActivate = true
 	state = States.JUMP
+
+func wall_slide(direction, delta):
+	velocity.y = WALL_SLIDE_FALL_SPEED * delta
+	sprite.play("WallSlide")
+	if not direction == 0:
+		sprite.flip_h = direction < 0
 
 func _on_timer_timeout() -> void:
 	get_tree().reload_current_scene()
