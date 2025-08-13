@@ -1,5 +1,8 @@
 extends CharacterBody2D
 
+class_name Player
+
+@export var STARTING_POSITION := Vector2(-14.0, -9.0)
 @export var SPEED := 10400
 @export var JUMP_VELOCITY := -30000
 @export var JUMPPAD_VELOCITY := -38000
@@ -36,6 +39,7 @@ var gravity: int = START_GRAVITY
 var onTheSpikes := false
 var jumpPadActivate := false
 var doubleJumpActive := true
+var deaths: int = 0
 
 func _ready():
 	set_meta("tag", "player")
@@ -101,9 +105,7 @@ func _physics_process(delta):
 			if Time.get_ticks_msec() - lastJumpQueueMsec < JUMP_BUFFER_TIME or Input.is_action_just_pressed("jump"): # jump buffer
 				state = States.JUMP
 			else:
-				velocity.y = lerp(velocity.x, 0.0, 10.0)
 				velocity.x = 0
-				velocity.y = lerp(velocity.x, 0.0, 10.0)
 				#sprite.scale.x = 1 # No needed
 				sprite.play("Idle")
 				if direction != 0:
@@ -138,6 +140,7 @@ func run(direction, delta):
 		sprite.flip_h = direction < 0
 	
 func die():
+	deaths += 1
 	onTheSpikes = true
 	state = States.DEAD
 	sprite.play("Die")
@@ -148,4 +151,6 @@ func jump_pad():
 	state = States.JUMP
 
 func _on_timer_timeout() -> void:
-	get_tree().reload_current_scene()
+	onTheSpikes = false
+	state = States.IDLE
+	position = STARTING_POSITION
