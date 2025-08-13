@@ -5,3 +5,7 @@ extends StaticBody2D
 
 func _physics_process(delta: float) -> void:
 	position += speed * direction * delta
+	
+func _on_body_entered(body: Node2D) -> void:
+	if body.name == "Point A" or body.name == "Point B":
+		direction *= -1
