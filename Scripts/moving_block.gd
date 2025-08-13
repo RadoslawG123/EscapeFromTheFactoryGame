@@ -1,11 +1,19 @@
-extends StaticBody2D
+extends Path2D
 
-@export var speed: float = 50.0
-@export var direction: Vector2 = Vector2.LEFT
+@export var loop := true
+@export var speed := 50.0
+@export var speed_scale := 1.0
 
-func _physics_process(delta: float) -> void:
-	position += speed * direction * delta
-	
-func _on_body_entered(body: Node2D) -> void:
-	if body.name == "Point A" or body.name == "Point B":
-		direction *= -1
+@onready var path: PathFollow2D = $PathFollow2D
+@onready var animation: AnimationPlayer = $AnimationPlayer
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	if not loop:
+		animation.play("move")
+		#animation.speed_scale = speed_scale 
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	path.progress += speed * delta

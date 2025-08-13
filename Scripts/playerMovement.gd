@@ -101,8 +101,10 @@ func _physics_process(delta):
 			if Time.get_ticks_msec() - lastJumpQueueMsec < JUMP_BUFFER_TIME or Input.is_action_just_pressed("jump"): # jump buffer
 				state = States.JUMP
 			else:
+				velocity.y = lerp(velocity.x, 0.0, 10.0)
 				velocity.x = 0
-				sprite.scale.x = 1
+				velocity.y = lerp(velocity.x, 0.0, 10.0)
+				#sprite.scale.x = 1 # No needed
 				sprite.play("Idle")
 				if direction != 0:
 					state = States.RUN
@@ -129,7 +131,7 @@ func _physics_process(delta):
 	prevVelocity = velocity
 	
 	move_and_slide()
-	
+
 func run(direction, delta):
 	velocity.x = SPEED * direction * delta
 	if not direction == 0:
