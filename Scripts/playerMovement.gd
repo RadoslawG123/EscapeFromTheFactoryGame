@@ -40,6 +40,7 @@ var onTheSpikes := false
 var jumpPadActivate := false
 var doubleJumpActive := true
 var deaths: int = 0
+var checkpointPosition := STARTING_POSITION
 
 func _ready():
 	set_meta("tag", "player")
@@ -153,4 +154,4 @@ func jump_pad():
 func _on_timer_timeout() -> void:
 	onTheSpikes = false
 	state = States.IDLE
-	position = STARTING_POSITION
+	position = checkpointPosition

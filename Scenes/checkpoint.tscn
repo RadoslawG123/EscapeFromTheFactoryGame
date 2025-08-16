@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://ca6g1hsm0lgdq"]
+
+[ext_resource type="Script" uid="uid://b4c62hxcio0u6" path="res://Scripts/checkpoint.gd" id="1_2cwi7"]
+[ext_resource type="Texture2D" uid="uid://bw2c8b5nqtm1t" path="res://Assets/Others/Map_Markers_Flagpole_Triangle_Minesweeper.png" id="2_e75gc"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_i1pff"]
+
+[node name="Checkpoint" type="Node2D"]
+scale = Vector2(1.5, 1.5)
+script = ExtResource("1_2cwi7")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+z_index = -1
+texture = ExtResource("2_e75gc")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_i1pff")
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_body_entered"]
