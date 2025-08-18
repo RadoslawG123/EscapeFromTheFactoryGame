@@ -1,16 +1,21 @@
-[gd_scene load_steps=29 format=3 uid="uid://d3h7eqgdb8th4"]
+[gd_scene load_steps=31 format=3 uid="uid://d3h7eqgdb8th4"]
 
 [ext_resource type="Script" uid="uid://bb2yy3uhtw83d" path="res://Scripts/playerMovement.gd" id="1_cvnsp"]
 [ext_resource type="Texture2D" uid="uid://cfyywj0b1eecw" path="res://Assets/Player/Idle.png" id="1_v0iea"]
 [ext_resource type="Texture2D" uid="uid://b1sm4qjppq831" path="res://Assets/Player/Air Idle.png" id="2_fkybt"]
 [ext_resource type="Texture2D" uid="uid://bgno6id32lw4x" path="res://Assets/Player/Walk.png" id="3_6t5aa"]
 [ext_resource type="Texture2D" uid="uid://cop0tpk21ri2h" path="res://Assets/Player/Roll.png" id="3_8erm5"]
+[ext_resource type="Texture2D" uid="uid://digivhlavc067" path="res://Assets/Player/Crouch.png" id="3_f1ek2"]
 [ext_resource type="Texture2D" uid="uid://sxwv1tbwbew1" path="res://Assets/Player/Jump.png" id="3_vgqql"]
 [ext_resource type="Texture2D" uid="uid://bjp76kav8m0rd" path="res://Assets/Player/Hurt.png" id="3_x3wgy"]
 [ext_resource type="Texture2D" uid="uid://d2i7mjrpxlj3n" path="res://Assets/Player/Slide.png" id="7_3smsa"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pu2lt"]
 atlas = ExtResource("2_fkybt")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_l6n3p"]
+atlas = ExtResource("3_f1ek2")
 region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fd4e3"]
@@ -91,10 +96,13 @@ animations = [{
 "name": &"AirIdle",
 "speed": 10.0
 }, {
-"frames": [],
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l6n3p")
+}],
 "loop": true,
 "name": &"Crouch",
-"speed": 5.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -190,7 +198,7 @@ sprite_frames = SubResource("SpriteFrames_vgqql")
 animation = &"Crouch"
 autoplay = "Idle"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[node name="CollisionShape" type="CollisionShape2D" parent="."]
 position = Vector2(0, 1.5)
 shape = SubResource("RectangleShape2D_fkybt")
 
@@ -205,6 +213,14 @@ one_shot = true
 [node name="DashCooldawn" type="Timer" parent="."]
 one_shot = true
 
+[node name="SpikesHitbox" type="Area2D" parent="."]
+collision_mask = 4
+
+[node name="SpikesCollisionShape" type="CollisionShape2D" parent="SpikesHitbox"]
+position = Vector2(0, 1.5)
+shape = SubResource("RectangleShape2D_fkybt")
+
 [connection signal="timeout" from="Timer1" to="." method="_on_timer_timeout"]
 [connection signal="timeout" from="DashTimer" to="." method="_on_dash_timer_timeout"]
 [connection signal="timeout" from="DashCooldawn" to="." method="_on_dash_cooldawn_timeout"]
+[connection signal="body_entered" from="SpikesHitbox" to="." method="_on_spikes_entered"]

@@ -25,6 +25,8 @@ class_name Player
 @onready var sprite: AnimatedSprite2D = $"AnimatedSprite2D"
 @onready var dash_timer: Timer = $DashTimer
 @onready var dash_cooldawn: Timer = $DashCooldawn
+@onready var collision_shape: CollisionShape2D = $CollisionShape
+@onready var spikes_collision_shape: CollisionShape2D = $SpikesHitbox/SpikesCollisionShape
 
 ## States variables and enumerations
 enum States {
@@ -65,14 +67,14 @@ func _physics_process(delta):
 	if direction != 0:
 		prev_direction = direction
 	
-	if Input.is_action_just_pressed("Reload"):
+	if Input.is_action_just_pressed("reload"):
 		get_tree().reload_current_scene()
 	
 	## Spikes
-	var tile_pos = tile_map.local_to_map(global_position)
-	var tile_data = tile_map.get_cell_tile_data(0, tile_pos)
-	if tile_data and tile_data.get_custom_data("Spikes") == true and onTheSpikes == false:
-		die()
+	#var tile_pos = tile_map.local_to_map(global_position)
+	#var tile_data = tile_map.get_cell_tile_data(0, tile_pos)
+	#if tile_data and tile_data.get_custom_data("Spikes") == true and onTheSpikes == false:
+		#die()
 
 	## Falling and calculating time for coyote time
 	if is_on_floor():
@@ -153,8 +155,16 @@ func _physics_process(delta):
 				sprite.play("Idle")
 				if direction != 0:
 					state = States.RUN
+					
+			## Action - Crouch
+			if Input.is_action_pressed("crouch"):
+				crouch()
+			else:
+				collision_shape.shape.size.y = 13.0
+				collision_shape.position.y = 1.5
+				spikes_collision_shape.position.y = 1.5
 		## Run
-		States.RUN:
+		States.RUN:	
 			## Action - Dash
 			#if Input.is_action_just_pressed("dash") and not isDashing and canDash:
 				#isDashing = true
@@ -168,6 +178,15 @@ func _physics_process(delta):
 				state = States.IDLE
 			elif Input.is_action_just_pressed("jump"): 
 				state = States.JUMP
+				
+			## Action - Crouch
+			if Input.is_action_pressed("crouch"):
+				crouch()
+			else:
+				## Changing collision shape to smaller 
+				collision_shape.shape.size.y = 13.0
+				collision_shape.position.y = 1.5
+				spikes_collision_shape.position.y = 1.5
 		## Dead
 		States.DEAD:
 			velocity.x = 0
@@ -188,6 +207,16 @@ func _physics_process(delta):
 	move_and_slide()
 
 ## Functions
+func crouch():
+	## Changing collision shape to smaller 
+	collision_shape.shape.size.y = 7.0
+	collision_shape.position.y = 4.5
+	spikes_collision_shape.position.y = 4.5
+	
+	velocity.x = 0
+	velocity.y = 0
+	sprite.play("Crouch")
+
 func dash(delta):
 	if isDashing:
 		canDash = false
@@ -235,3 +264,7 @@ func _on_dash_timer_timeout() -> void:
 ### Timeout - dash cooldawn
 #func _on_dash_cooldawn_timeout() -> void:
 	#canDash = true
+
+## Touches the spikes
+func _on_spikes_entered(_body: Node2D) -> void:
+	die()

@@ -12,7 +12,7 @@ var s: int
 
 @export var player: Player
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	update()
 
 func _on_timer_timeout() -> void:
