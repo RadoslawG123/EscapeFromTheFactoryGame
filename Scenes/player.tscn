@@ -1,4 +1,4 @@
-[gd_scene load_steps=31 format=3 uid="uid://d3h7eqgdb8th4"]
+[gd_scene load_steps=33 format=3 uid="uid://d3h7eqgdb8th4"]
 
 [ext_resource type="Script" uid="uid://bb2yy3uhtw83d" path="res://Scripts/playerMovement.gd" id="1_cvnsp"]
 [ext_resource type="Texture2D" uid="uid://cfyywj0b1eecw" path="res://Assets/Player/Idle.png" id="1_v0iea"]
@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://sxwv1tbwbew1" path="res://Assets/Player/Jump.png" id="3_vgqql"]
 [ext_resource type="Texture2D" uid="uid://bjp76kav8m0rd" path="res://Assets/Player/Hurt.png" id="3_x3wgy"]
 [ext_resource type="Texture2D" uid="uid://d2i7mjrpxlj3n" path="res://Assets/Player/Slide.png" id="7_3smsa"]
+[ext_resource type="Texture2D" uid="uid://d2opp4vjjjv3l" path="res://Assets/Player/Wall Tech.png" id="10_tx1dd"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_pu2lt"]
 atlas = ExtResource("2_fkybt")
@@ -84,6 +85,10 @@ region = Rect2(192, 0, 64, 64)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_h4iuc"]
 atlas = ExtResource("7_3smsa")
+region = Rect2(0, 0, 64, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_olqyp"]
+atlas = ExtResource("10_tx1dd")
 region = Rect2(0, 0, 64, 64)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_vgqql"]
@@ -184,6 +189,14 @@ animations = [{
 "loop": true,
 "name": &"Slide",
 "speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_olqyp")
+}],
+"loop": true,
+"name": &"WallSlide",
+"speed": 10.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fkybt"]
@@ -195,22 +208,28 @@ script = ExtResource("1_cvnsp")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_vgqql")
-animation = &"Crouch"
+animation = &"WallSlide"
 autoplay = "Idle"
 
 [node name="CollisionShape" type="CollisionShape2D" parent="."]
 position = Vector2(0, 1.5)
 shape = SubResource("RectangleShape2D_fkybt")
 
-[node name="Timer1" type="Timer" parent="."]
+[node name="Timers" type="Node2D" parent="."]
+
+[node name="DeathTimer" type="Timer" parent="Timers"]
 wait_time = 0.3
 one_shot = true
 
-[node name="DashTimer" type="Timer" parent="."]
+[node name="DashTimer" type="Timer" parent="Timers"]
 wait_time = 0.2
 one_shot = true
 
-[node name="DashCooldawn" type="Timer" parent="."]
+[node name="DashCooldawn" type="Timer" parent="Timers"]
+one_shot = true
+
+[node name="WallJumpTimer" type="Timer" parent="Timers"]
+wait_time = 0.2
 one_shot = true
 
 [node name="SpikesHitbox" type="Area2D" parent="."]
@@ -220,7 +239,18 @@ collision_mask = 4
 position = Vector2(0, 1.5)
 shape = SubResource("RectangleShape2D_fkybt")
 
-[connection signal="timeout" from="Timer1" to="." method="_on_timer_timeout"]
-[connection signal="timeout" from="DashTimer" to="." method="_on_dash_timer_timeout"]
-[connection signal="timeout" from="DashCooldawn" to="." method="_on_dash_cooldawn_timeout"]
+[node name="Raycasts" type="Node2D" parent="."]
+
+[node name="Left" type="RayCast2D" parent="Raycasts"]
+position = Vector2(0, -4)
+target_position = Vector2(-8, 0)
+
+[node name="Right" type="RayCast2D" parent="Raycasts"]
+position = Vector2(0, -4)
+target_position = Vector2(8, 0)
+
+[connection signal="timeout" from="Timers/DeathTimer" to="." method="_on_timer_timeout"]
+[connection signal="timeout" from="Timers/DashTimer" to="." method="_on_dash_timer_timeout"]
+[connection signal="timeout" from="Timers/DashCooldawn" to="." method="_on_dash_cooldawn_timeout"]
+[connection signal="timeout" from="Timers/WallJumpTimer" to="." method="_on_wall_jump_timer_timeout"]
 [connection signal="body_entered" from="SpikesHitbox" to="." method="_on_spikes_entered"]

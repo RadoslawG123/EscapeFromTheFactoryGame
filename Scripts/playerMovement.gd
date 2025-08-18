@@ -21,12 +21,15 @@ class_name Player
 @export var tile_map: TileMap
 
 ## Objects variables
-@onready var timer1: Timer = $Timer1
+@onready var death_timer: Timer = $Timers/DeathTimer
 @onready var sprite: AnimatedSprite2D = $"AnimatedSprite2D"
-@onready var dash_timer: Timer = $DashTimer
-@onready var dash_cooldawn: Timer = $DashCooldawn
+@onready var dash_timer: Timer = $Timers/DashTimer
+@onready var dash_cooldawn: Timer = $Timers/DashCooldawn
+@onready var wall_jump_timer: Timer = $Timers/WallJumpTimer
 @onready var collision_shape: CollisionShape2D = $CollisionShape
 @onready var spikes_collision_shape: CollisionShape2D = $SpikesHitbox/SpikesCollisionShape
+@onready var raycast_left: RayCast2D = $Raycasts/Left
+@onready var raycast_right: RayCast2D = $Raycasts/Right
 
 ## States variables and enumerations
 enum States {
@@ -36,6 +39,7 @@ enum States {
 	AIR,
 	DEAD,
 	DASH,
+	WALL
 }
 @onready var state: States = States.AIR
 
@@ -45,6 +49,11 @@ var dashDistance := 1000
 var isDashing := false
 var canDash := true
 var prev_direction := 1.0
+
+## WallJump variables
+var doWallJump = false
+var wallJumpTimerActive = false
+var jumpsCount = 0
 
 ## Other variables
 var prevVelocity := Vector2.ZERO
@@ -79,7 +88,7 @@ func _physics_process(delta):
 	## Falling and calculating time for coyote time
 	if is_on_floor():
 		lastFloorMsec = Time.get_ticks_msec()
-	elif state != States.JUMP and state != States.AIR and state != States.DEAD and state != States.DASH:
+	elif state != States.JUMP and state != States.AIR and state != States.DEAD and state != States.DASH and state != States.WALL:
 		state = States.AIR
 		sprite.play("Jump") #fall
 	
@@ -100,6 +109,9 @@ func _physics_process(delta):
 			state = States.AIR
 		## Air
 		States.AIR:
+			if (Input.is_action_pressed("move_left") and raycast_left.is_colliding()) or (Input.is_action_pressed("move_right") and raycast_right.is_colliding()) and is_on_wall_only():
+				state = States.WALL
+			
 			## Action - Dash
 			if Input.is_action_just_pressed("dash") and not isDashing and canDash:
 				isDashing = true
@@ -137,20 +149,31 @@ func _physics_process(delta):
 				gravity *= AIR_HANG_MULTIPLIER
 			else:
 				gravity = START_GRAVITY
+				
 		## Dash
 		States.DASH:
 			dash(delta)
+		## Wall
+		States.WALL:
+			## Action - Jump
+			if Input.is_action_just_pressed("jump"):
+				doWallJump = true
+			
+			if doWallJump:
+				wall_jump(direction, delta)
+			elif (raycast_left.is_colliding() and Input.is_action_pressed("move_left")) or (raycast_right.is_colliding() and Input.is_action_pressed("move_right")) and not is_on_floor():
+				wall_slide(delta)
+			elif not is_on_floor():
+				state = States.AIR
+			else:
+				state = States.IDLE
 		## Idle
 		States.IDLE:
-			## Action - Dash
-			#if Input.is_action_just_pressed("dash") and not isDashing and canDash:
-					#isDashing = true
-					#state = States.DASH
-			
 			## Action - Jump or Run
 			if Time.get_ticks_msec() - lastJumpQueueMsec < JUMP_BUFFER_TIME or Input.is_action_just_pressed("jump"): # jump buffer
 				state = States.JUMP
 			else:
+				canDash = true
 				velocity.x = 0
 				sprite.play("Idle")
 				if direction != 0:
@@ -164,14 +187,10 @@ func _physics_process(delta):
 				collision_shape.position.y = 1.5
 				spikes_collision_shape.position.y = 1.5
 		## Run
-		States.RUN:	
-			## Action - Dash
-			#if Input.is_action_just_pressed("dash") and not isDashing and canDash:
-				#isDashing = true
-				#state = States.DASH
-				
+		States.RUN:
 			sprite.play("Run")
 			run(direction, delta)
+			canDash = true
 			
 			## State changes to IDLE or JUMP
 			if direction == 0:
@@ -207,6 +226,25 @@ func _physics_process(delta):
 	move_and_slide()
 
 ## Functions
+func wall_slide(delta):
+	#velocity.x = 0
+	velocity.y = SPEED/3 * delta
+	sprite.play("WallSlide")
+
+func wall_jump(direction, delta):
+	jumpsCount += 1
+	doubleJumpActive = false
+	
+	if raycast_left.is_colliding() or raycast_right.is_colliding():
+		velocity.x = SPEED*1.3 * -prev_direction * delta
+	velocity.y = JUMP_VELOCITY * delta
+	sprite.play("AirIdle")
+	
+	doWallJump = false
+	#if not wallJumpTimerActive:
+		#wallJumpTimerActive = true
+		#wall_jump_timer.start()
+
 func crouch():
 	## Changing collision shape to smaller 
 	collision_shape.shape.size.y = 7.0
@@ -222,7 +260,7 @@ func dash(delta):
 		canDash = false
 		isDashing = false
 		dash_timer.start()
-		dash_cooldawn.start()
+		#dash_cooldawn.start()
 		
 	sprite.play("Dash")
 	velocity.x = SPEED*2 * prev_direction * delta
@@ -239,7 +277,7 @@ func die():
 	state = States.DEAD
 	
 	sprite.play("Die")
-	timer1.start()
+	death_timer.start()
 
 func jump_pad():
 	jumpPadActivate = true
@@ -268,3 +306,7 @@ func _on_dash_timer_timeout() -> void:
 ## Touches the spikes
 func _on_spikes_entered(_body: Node2D) -> void:
 	die()
+
+func _on_wall_jump_timer_timeout() -> void:
+	doWallJump = false
+	wallJumpTimerActive = false
