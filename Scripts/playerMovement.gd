@@ -105,10 +105,11 @@ func _physics_process(delta):
 			else:
 				velocity.y = JUMPPAD_VELOCITY * delta
 				sprite.play("Jump")
-
+			
 			state = States.AIR
 		## Air
 		States.AIR:
+			## Action - Wall Jump
 			if (Input.is_action_pressed("move_left") and raycast_left.is_colliding()) or (Input.is_action_pressed("move_right") and raycast_right.is_colliding()) and is_on_wall_only():
 				state = States.WALL
 			
@@ -133,7 +134,7 @@ func _physics_process(delta):
 			velocity.x = lerp(prevVelocity.x, velocity.x, AIR_X_SMOOTHING)
 			
 			## Action - Jump
-			if Input.is_action_just_pressed("jump"):
+			if Input.is_action_just_pressed("jump") and not isDashing:
 				## Coyote Time
 				if Time.get_ticks_msec() - lastFloorMsec < COYOTE_TIME and not jumpPadActivate and not doubleJumpActive:
 					state = States.JUMP
@@ -292,6 +293,7 @@ func _on_timer_timeout() -> void:
 ## Timeout - changing state after dash perform
 func _on_dash_timer_timeout() -> void:
 	print("Dash ends")
+
 	if is_on_floor():
 		canDash = true
 		state = States.IDLE
