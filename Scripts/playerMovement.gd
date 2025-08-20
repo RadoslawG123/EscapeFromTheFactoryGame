@@ -28,8 +28,10 @@ class_name Player
 @onready var wall_jump_timer: Timer = $Timers/WallJumpTimer
 @onready var collision_shape: CollisionShape2D = $CollisionShape
 @onready var spikes_collision_shape: CollisionShape2D = $SpikesHitbox/SpikesCollisionShape
-@onready var raycast_left: RayCast2D = $Raycasts/Left
-@onready var raycast_right: RayCast2D = $Raycasts/Right
+@onready var left_up: RayCast2D = $Raycasts/LeftUp
+@onready var left_bottom: RayCast2D = $Raycasts/LeftBottom
+@onready var right_up: RayCast2D = $Raycasts/RightUp
+@onready var right_bottom: RayCast2D = $Raycasts/RightBottom
 
 ## States variables and enumerations
 enum States {
@@ -53,7 +55,6 @@ var prev_direction := 1.0
 ## WallJump variables
 var doWallJump := false
 var wallJumpTimerActive := false
-var jumpsCount := 0
 var prevPosition := STARTING_POSITION
 
 ## Other variables
@@ -67,12 +68,12 @@ var jumpPadActivate := false
 var doubleJumpActive := true
 var deaths: int = 0
 var checkpointPosition := STARTING_POSITION
-#var number := 0
 
 func _ready():
 	set_meta("tag", "player")
 
 func _physics_process(delta):
+	print(state)
 	## Direction
 	var direction = Input.get_axis("move_left", "move_right")
 	if direction != 0:
@@ -112,7 +113,8 @@ func _physics_process(delta):
 		## Air
 		States.AIR:
 			## Action - Wall Jump
-			if (Input.is_action_pressed("move_left") and raycast_left.is_colliding()) or (Input.is_action_pressed("move_right") and raycast_right.is_colliding()) and is_on_wall_only():
+			if ((Input.is_action_pressed("move_left") and leftRaycasts()) or 
+			(Input.is_action_pressed("move_right") and rightRaycasts())) and is_on_wall_only():
 				state = States.WALL
 			
 			#if prevPosition.y < position.y and (raycast_left.is_colliding() or raycast_right.is_colliding()):
@@ -167,14 +169,20 @@ func _physics_process(delta):
 			if Input.is_action_just_pressed("jump"):
 				doWallJump = true
 			
+			## Action - Fall
+			if Input.is_action_just_pressed("crouch"):
+				state = States.AIR
+				sprite.play("AirIdle")
+			
 			if doWallJump:
 				wall_jump(direction, delta)
-			elif prevPosition.y < velocity.y and (raycast_left.is_colliding() or raycast_right.is_colliding()) and not is_on_floor():
+			elif prevPosition.y < velocity.y and raycasts() and not is_on_floor() and state != States.AIR:
 				wall_slide(delta)
 			elif not is_on_floor():
 				state = States.AIR
 			else:
 				state = States.IDLE
+				
 		## Idle
 		States.IDLE:
 			## Action - Jump or Run
@@ -241,10 +249,9 @@ func wall_slide(delta):
 	sprite.play("WallSlide")
 
 func wall_jump(direction, delta):
-	jumpsCount += 1
 	doubleJumpActive = false
 	
-	if raycast_left.is_colliding() or raycast_right.is_colliding():
+	if raycasts():
 		velocity.x = SPEED*1.3 * -prev_direction * delta
 	velocity.y = JUMP_VELOCITY * delta
 	sprite.play("AirIdle")
@@ -320,3 +327,16 @@ func _on_spikes_entered(_body: Node2D) -> void:
 func _on_wall_jump_timer_timeout() -> void:
 	doWallJump = false
 	wallJumpTimerActive = false
+
+## Raycasts functions
+func raycasts():
+	return (left_up.is_colliding() or 
+			left_bottom.is_colliding() or 
+			right_up.is_colliding() or 
+			right_bottom.is_colliding())
+
+func leftRaycasts():
+	return left_up.is_colliding() or left_bottom.is_colliding()
+	
+func rightRaycasts():
+	return right_up.is_colliding() or right_bottom.is_colliding()

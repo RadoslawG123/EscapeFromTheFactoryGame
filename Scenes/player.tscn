@@ -241,12 +241,20 @@ shape = SubResource("RectangleShape2D_fkybt")
 
 [node name="Raycasts" type="Node2D" parent="."]
 
-[node name="Left" type="RayCast2D" parent="Raycasts"]
+[node name="LeftUp" type="RayCast2D" parent="Raycasts"]
 position = Vector2(0, -4)
 target_position = Vector2(-8, 0)
 
-[node name="Right" type="RayCast2D" parent="Raycasts"]
-position = Vector2(0, -4)
+[node name="LeftBottom" type="RayCast2D" parent="Raycasts"]
+position = Vector2(0, 5)
+target_position = Vector2(-8, 0)
+
+[node name="RightUp" type="RayCast2D" parent="Raycasts"]
+position = Vector2(0, -3)
+target_position = Vector2(8, 0)
+
+[node name="RightBottom" type="RayCast2D" parent="Raycasts"]
+position = Vector2(0, 5)
 target_position = Vector2(8, 0)
 
 [connection signal="timeout" from="Timers/DeathTimer" to="." method="_on_timer_timeout"]
