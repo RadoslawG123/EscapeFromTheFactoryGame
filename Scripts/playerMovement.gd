@@ -51,9 +51,10 @@ var canDash := true
 var prev_direction := 1.0
 
 ## WallJump variables
-var doWallJump = false
-var wallJumpTimerActive = false
-var jumpsCount = 0
+var doWallJump := false
+var wallJumpTimerActive := false
+var jumpsCount := 0
+var prevPosition := STARTING_POSITION
 
 ## Other variables
 var prevVelocity := Vector2.ZERO
@@ -66,6 +67,7 @@ var jumpPadActivate := false
 var doubleJumpActive := true
 var deaths: int = 0
 var checkpointPosition := STARTING_POSITION
+#var number := 0
 
 func _ready():
 	set_meta("tag", "player")
@@ -112,6 +114,11 @@ func _physics_process(delta):
 			## Action - Wall Jump
 			if (Input.is_action_pressed("move_left") and raycast_left.is_colliding()) or (Input.is_action_pressed("move_right") and raycast_right.is_colliding()) and is_on_wall_only():
 				state = States.WALL
+			
+			#if prevPosition.y < position.y and (raycast_left.is_colliding() or raycast_right.is_colliding()):
+				#state = States.WALL
+				#print("Sliding: ", number)
+				#number += 1
 			
 			## Action - Dash
 			if Input.is_action_just_pressed("dash") and not isDashing and canDash:
@@ -162,7 +169,7 @@ func _physics_process(delta):
 			
 			if doWallJump:
 				wall_jump(direction, delta)
-			elif (raycast_left.is_colliding() and Input.is_action_pressed("move_left")) or (raycast_right.is_colliding() and Input.is_action_pressed("move_right")) and not is_on_floor():
+			elif prevPosition.y < velocity.y and (raycast_left.is_colliding() or raycast_right.is_colliding()) and not is_on_floor():
 				wall_slide(delta)
 			elif not is_on_floor():
 				state = States.AIR
@@ -224,12 +231,13 @@ func _physics_process(delta):
 	## Others
 	wasOnFloor = is_on_floor()
 	prevVelocity = velocity
+	#prevPosition = position
 	move_and_slide()
 
 ## Functions
 func wall_slide(delta):
 	#velocity.x = 0
-	velocity.y = SPEED/3 * delta
+	velocity.y = SPEED/2.5 * delta
 	sprite.play("WallSlide")
 
 func wall_jump(direction, delta):
