@@ -1,6 +1,6 @@
 extends Node2D
 
-@export var player: Player
+@onready var player: Player = %Player
 @onready var sprite: Sprite2D = $Sprite2D
 
 func _on_body_entered(body: Node2D) -> void:

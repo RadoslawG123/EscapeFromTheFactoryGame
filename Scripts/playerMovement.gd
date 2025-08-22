@@ -73,7 +73,9 @@ func _ready():
 	set_meta("tag", "player")
 
 func _physics_process(delta):
-	print(state)
+	print("isDashing: ", isDashing)
+	print("canDash: ", canDash)
+	print("state: ", state)
 	## Direction
 	var direction = Input.get_axis("move_left", "move_right")
 	if direction != 0:
@@ -163,6 +165,14 @@ func _physics_process(delta):
 		## Dash
 		States.DASH:
 			dash(delta)
+			if raycasts():
+				if is_on_floor():
+					canDash = true
+					state = States.IDLE
+				else:
+					state = States.AIR
+					sprite.play("AirIdle")
+				
 		## Wall
 		States.WALL:
 			## Action - Jump
@@ -183,8 +193,16 @@ func _physics_process(delta):
 			else:
 				state = States.IDLE
 				
+			## Gravity
+			velocity.y += gravity * delta
+			if abs(velocity.y) < AIR_HANG_THRESHOLD:
+				gravity *= AIR_HANG_MULTIPLIER
+			else:
+				gravity = START_GRAVITY
 		## Idle
 		States.IDLE:
+			doubleJumpActive = true 
+			
 			## Action - Jump or Run
 			if Time.get_ticks_msec() - lastJumpQueueMsec < JUMP_BUFFER_TIME or Input.is_action_just_pressed("jump"): # jump buffer
 				state = States.JUMP
@@ -253,7 +271,7 @@ func wall_jump(direction, delta):
 	
 	if raycasts():
 		velocity.x = SPEED*1.3 * -prev_direction * delta
-	velocity.y = JUMP_VELOCITY * delta
+	velocity.y = JUMP_VELOCITY*1.1 * delta
 	sprite.play("AirIdle")
 	
 	doWallJump = false

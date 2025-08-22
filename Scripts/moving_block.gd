@@ -12,7 +12,7 @@ extends Path2D
 func _ready() -> void:
 	if not loop:
 		animation.play("move")
-		#animation.speed_scale = speed_scale 
+		animation.speed_scale = speed_scale 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
