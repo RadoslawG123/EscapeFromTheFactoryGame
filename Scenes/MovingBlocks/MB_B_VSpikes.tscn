@@ -1,0 +1,78 @@
+[gd_scene load_steps=7 format=3 uid="uid://dn0vyxg7mxdcm"]
+
+[ext_resource type="Script" uid="uid://dmf1e0ptgtx5" path="res://Scripts/moving_block.gd" id="1_il18x"]
+[ext_resource type="Texture2D" uid="uid://qu02yfnlxygc" path="res://Assets/MovingBlocks/vertically_spikes_brown_cube.png" id="2_1kfdq"]
+
+[sub_resource type="Curve2D" id="Curve2D_u1ftq"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, 0, 75, 0, 0, 0, 0, -644.286, 77.1429)
+}
+point_count = 2
+
+[sub_resource type="Animation" id="Animation_gi6jj"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PathFollow2D:progress_ratio")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_pq7gf"]
+resource_name = "move"
+length = 2.0
+loop_mode = 2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PathFollow2D:progress_ratio")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 1.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ocuw6"]
+_data = {
+&"RESET": SubResource("Animation_gi6jj"),
+&"move": SubResource("Animation_pq7gf")
+}
+
+[node name="movingBlock_verticall_spikes" type="Path2D" groups=["Obstacles"]]
+curve = SubResource("Curve2D_u1ftq")
+script = ExtResource("1_il18x")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="."]
+position = Vector2(0, 75)
+rotation = -1.5708
+
+[node name="RemoteTransform2D" type="RemoteTransform2D" parent="PathFollow2D"]
+remote_path = NodePath("../../AnimatableBody2D")
+update_rotation = false
+
+[node name="AnimatableBody2D" type="AnimatableBody2D" parent="."]
+position = Vector2(0, 75)
+rotation = -0.00731694
+collision_layer = 4
+
+[node name="Sprite2D" type="Sprite2D" parent="AnimatableBody2D"]
+position = Vector2(0.00731668, -0.999973)
+scale = Vector2(1.96494, 1.99016)
+texture = ExtResource("2_1kfdq")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="AnimatableBody2D"]
+polygon = PackedVector2Array(-14.0947, 12.8972, -16.0947, 12.8826, -15.8898, -15.1167, -13.8899, -15.102, -13.846, -21.1019, -11.846, -21.0872, -11.8168, -25.0871, -9.81681, -25.0725, -9.80218, -27.0724, -5.80228, -27.0432, -5.81692, -25.0432, -3.81697, -25.0286, -3.84624, -21.0287, -1.84629, -21.0141, -1.87556, -17.0142, 2.12433, -16.9849, 2.1536, -20.9848, 4.15355, -20.9702, 4.18281, -24.9701, 6.18276, -24.9554, 6.19739, -26.9554, 10.1973, -26.9261, 10.1827, -24.9262, 12.1826, -24.9115, 12.1533, -20.9116, 14.1533, -20.897, 14.1094, -14.8972, 16.1093, -14.8825, 15.9045, 13.1167, 13.9045, 13.1021, 13.8606, 19.1019, 11.8607, 19.0873, 11.8314, 23.0872, 9.83144, 23.0726, 9.81681, 25.0725, 5.81691, 25.0432, 5.83155, 23.0433, 3.8316, 23.0287, 3.86087, 19.0288, 1.86092, 19.0141, 1.89019, 15.0142, -2.1097, 14.985, -2.13897, 18.9849, -4.13891, 18.9702, -4.16818, 22.9701, -6.16813, 22.9555, -6.18276, 24.9554, -9.18268, 24.9335, -9.16805, 22.9335, -11.168, 22.9189, -11.1387, 18.919, -14.1386, 18.8971, -14.0947, 12.8972)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_ocuw6")
+}

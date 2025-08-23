@@ -320,6 +320,11 @@ func jump_pad():
 ## Timeout - dieing
 func _on_timer_timeout() -> void:
 	onTheSpikes = false
+	
+	isDashing = false
+	canDash = true
+	doubleJumpActive = true
+	
 	state = States.IDLE
 	position = checkpointPosition
 

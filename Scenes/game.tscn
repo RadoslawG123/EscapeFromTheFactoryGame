@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://d3h7eqgdb8th4" path="res://Scenes/player.tscn" id="1_ebmjs"]
 [ext_resource type="Texture2D" uid="uid://dw8yeht3eibs8" path="res://Assets/Tileset/factory_.png" id="2_qxrlw"]
 [ext_resource type="PackedScene" uid="uid://n5tv8pumcq4r" path="res://Scenes/jum_pad.tscn" id="4_3dryh"]
-[ext_resource type="PackedScene" uid="uid://dlyimvx5mi81h" path="res://Scenes/moving_block.tscn" id="4_v158k"]
+[ext_resource type="PackedScene" uid="uid://dlyimvx5mi81h" path="res://Scenes/MovingBlocks/MB.tscn" id="4_v158k"]
 [ext_resource type="PackedScene" uid="uid://dhqknsh7bpvae" path="res://Scenes/gui.tscn" id="6_i6g32"]
 [ext_resource type="PackedScene" uid="uid://ca6g1hsm0lgdq" path="res://Scenes/checkpoint.tscn" id="7_1l0tm"]
 [ext_resource type="Script" uid="uid://c1nx8x0fmehue" path="res://Scripts/saver_loader.gd" id="8_h4fw4"]
