@@ -73,9 +73,9 @@ func _ready():
 	set_meta("tag", "player")
 
 func _physics_process(delta):
-	print("isDashing: ", isDashing)
-	print("canDash: ", canDash)
-	print("state: ", state)
+	#print("isDashing: ", isDashing)
+	#print("canDash: ", canDash)
+	#print("state: ", state)
 	## Direction
 	var direction = Input.get_axis("move_left", "move_right")
 	if direction != 0:

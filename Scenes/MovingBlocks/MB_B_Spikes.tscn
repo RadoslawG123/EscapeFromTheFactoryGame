@@ -52,8 +52,8 @@ curve = SubResource("Curve2D_u1ftq")
 script = ExtResource("1_8b1l3")
 
 [node name="PathFollow2D" type="PathFollow2D" parent="."]
-position = Vector2(0, 75)
-rotation = -1.5708
+position = Vector2(1.42871, 75.7143)
+rotation = -3.13945
 
 [node name="RemoteTransform2D" type="RemoteTransform2D" parent="PathFollow2D"]
 remote_path = NodePath("../../AnimatableBody2D")

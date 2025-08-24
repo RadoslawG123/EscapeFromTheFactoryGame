@@ -1,11 +1,11 @@
 [gd_scene load_steps=8 format=3 uid="uid://dlyimvx5mi81h"]
 
 [ext_resource type="Script" uid="uid://dmf1e0ptgtx5" path="res://Scripts/moving_block.gd" id="1_82qso"]
-[ext_resource type="Texture2D" uid="uid://dulpurh8igruo" path="res://icon.svg" id="2_pq7gf"]
+[ext_resource type="Texture2D" uid="uid://b4mewxbaw2nny" path="res://Assets/MovingBlocks/brown_cube.png" id="2_cf1nu"]
 
 [sub_resource type="Curve2D" id="Curve2D_u1ftq"]
 _data = {
-"points": PackedVector2Array(0, 0, 0, 0, 1.42871, 75.7143, 0, 0, 0, 0, -664.286, 74.2857)
+"points": PackedVector2Array(0, 0, 0, 0, 1.42871, 75.7143, 0, 0, 0, 0, -182.667, 77.3333)
 }
 point_count = 2
 
@@ -55,20 +55,22 @@ curve = SubResource("Curve2D_u1ftq")
 script = ExtResource("1_82qso")
 
 [node name="PathFollow2D" type="PathFollow2D" parent="."]
-position = Vector2(31, -4)
-rotation = 3.10315
+position = Vector2(1.42871, 75.7143)
+rotation = 3.1328
 
 [node name="RemoteTransform2D" type="RemoteTransform2D" parent="PathFollow2D"]
 remote_path = NodePath("../../AnimatableBody2D")
 update_rotation = false
 
 [node name="AnimatableBody2D" type="AnimatableBody2D" parent="."]
-position = Vector2(31, -4)
+position = Vector2(1.42871, 75.7143)
 rotation = -0.00731694
+scale = Vector2(1, 1)
 
 [node name="Sprite2D" type="Sprite2D" parent="AnimatableBody2D"]
-scale = Vector2(0.25, 0.25)
-texture = ExtResource("2_pq7gf")
+position = Vector2(-0.0507593, -0.000366211)
+scale = Vector2(1.96961, 1.98856)
+texture = ExtResource("2_cf1nu")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="AnimatableBody2D"]
 position = Vector2(0, 9.53674e-07)
