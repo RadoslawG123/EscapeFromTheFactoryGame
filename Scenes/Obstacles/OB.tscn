@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://derl2g1u3vwpd" path="res://Scripts/obstacles.gd" id="1_ildd5"]
 [ext_resource type="Texture2D" uid="uid://b4mewxbaw2nny" path="res://Assets/MovingBlocks/brown_cube.png" id="1_ix06i"]
 
-[node name="OB" type="CharacterBody2D"]
+[node name="OB" type="AnimatableBody2D"]
 script = ExtResource("1_ildd5")
 
 [node name="Area2D" type="Area2D" parent="."]

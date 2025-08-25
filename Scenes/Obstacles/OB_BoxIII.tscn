@@ -1,0 +1,22 @@
+[gd_scene load_steps=3 format=3 uid="uid://cgl6jax0widqj"]
+
+[ext_resource type="Script" uid="uid://derl2g1u3vwpd" path="res://Scripts/obstacles.gd" id="1_e1cb4"]
+[ext_resource type="Texture2D" uid="uid://cbs4rknftuxrc" path="res://Assets/Obstacles/Box3.png" id="2_e38fo"]
+
+[node name="OB_BOX3" type="AnimatableBody2D"]
+script = ExtResource("1_e1cb4")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="Sprite2D" type="Sprite2D" parent="Area2D"]
+texture = ExtResource("2_e38fo")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Area2D"]
+visible = false
+polygon = PackedVector2Array(-8, 16, -8, -16, 8, -16, 8, 16)
+
+[node name="CollisionPolygon2D2" type="CollisionPolygon2D" parent="."]
+visible = false
+z_index = -1
+z_as_relative = false
+polygon = PackedVector2Array(-8, 16, -8, -16, 8, -16, 8, 16)
