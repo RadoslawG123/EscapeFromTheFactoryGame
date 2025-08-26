@@ -65,7 +65,6 @@ update_rotation = false
 [node name="AnimatableBody2D" type="AnimatableBody2D" parent="."]
 position = Vector2(1.42871, 75.7143)
 rotation = -0.00731694
-scale = Vector2(1, 1)
 
 [node name="Sprite2D" type="Sprite2D" parent="AnimatableBody2D"]
 position = Vector2(-0.0507593, -0.000366211)

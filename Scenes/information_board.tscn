@@ -1,0 +1,49 @@
+[gd_scene load_steps=5 format=3 uid="uid://fkietpy6nv67"]
+
+[ext_resource type="Script" uid="uid://7idrujwmqxxy" path="res://Scripts/information_board.gd" id="1_1m6da"]
+[ext_resource type="Texture2D" uid="uid://cnmgoqfrinn68" path="res://Assets/Others/MessageBox.png" id="3_smd64"]
+[ext_resource type="FontFile" uid="uid://7jhs4l160kqf" path="res://Assets/Fonts/bitByBit_ [font].ttf" id="4_2du87"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1m6da"]
+size = Vector2(23, 17.75)
+
+[node name="InformationBoard" type="Area2D"]
+script = ExtResource("1_1m6da")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+
+[node name="TextureRect" type="TextureRect" parent="Control"]
+offset_left = -67.0
+offset_top = -107.0
+offset_right = 67.0
+offset_bottom = -38.0
+texture = ExtResource("3_smd64")
+expand_mode = 1
+
+[node name="Label" type="Label" parent="Control/TextureRect"]
+layout_mode = 0
+offset_left = 9.0
+offset_top = 6.0
+offset_right = 126.0
+offset_bottom = 54.0
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_constants/outline_size = 3
+theme_override_constants/shadow_outline_size = 2
+theme_override_fonts/font = ExtResource("4_2du87")
+theme_override_font_sizes/font_size = 10
+text = "PRESS \"W\" TWICE TO DOUBLE JUMP"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+scale = Vector2(2, 2)
+shape = SubResource("RectangleShape2D_1m6da")
+
+[connection signal="body_entered" from="." to="." method="_on_information_board_entered"]
+[connection signal="body_exited" from="." to="." method="_on_information_board_exited"]
