@@ -78,7 +78,7 @@ func _physics_process(delta):
 	#print("state: ", state)
 	## Direction
 	var direction = Input.get_axis("move_left", "move_right")
-	if direction != 0:
+	if direction != 0 and state != States.WALL:
 		prev_direction = direction
 	
 	if Input.is_action_just_pressed("reload"):
@@ -262,7 +262,7 @@ func _physics_process(delta):
 
 ## Functions
 func wall_slide(delta):
-	#velocity.x = 0
+	velocity.x = 0
 	velocity.y = SPEED/2.5 * delta
 	sprite.play("WallSlide")
 
@@ -270,6 +270,7 @@ func wall_jump(direction, delta):
 	doubleJumpActive = false
 	
 	if raycasts():
+		print(prev_direction)
 		velocity.x = SPEED*1.3 * -prev_direction * delta
 	velocity.y = JUMP_VELOCITY*1.1 * delta
 	sprite.play("AirIdle")

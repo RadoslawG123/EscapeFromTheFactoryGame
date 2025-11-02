@@ -15,6 +15,7 @@ layout_mode = 3
 anchors_preset = 0
 
 [node name="TextureRect" type="TextureRect" parent="Control"]
+layout_mode = 0
 offset_left = -67.0
 offset_top = -107.0
 offset_right = 67.0
