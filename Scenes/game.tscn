@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dlyimvx5mi81h" path="res://Scenes/MovingBlocks/MB.tscn" id="4_v158k"]
 [ext_resource type="PackedScene" uid="uid://dhqknsh7bpvae" path="res://Scenes/gui.tscn" id="6_i6g32"]
 [ext_resource type="PackedScene" uid="uid://ca6g1hsm0lgdq" path="res://Scenes/checkpoint.tscn" id="7_1l0tm"]
-[ext_resource type="Script" uid="uid://c1nx8x0fmehue" path="res://Scripts/saver_loader.gd" id="8_h4fw4"]
+[ext_resource type="Script" path="res://Scripts/saver_loader.gd" id="8_h4fw4"]
 [ext_resource type="PackedScene" uid="uid://4vx5gyvhj5km" path="res://Scenes/audio_stream_player.tscn" id="8_v158k"]
 
 [sub_resource type="TileMapPattern" id="TileMapPattern_i6g32"]
