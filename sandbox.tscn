@@ -1849,6 +1849,7 @@ player = NodePath("../../../Player")
 [node name="VictoryScreen" type="CanvasLayer" parent="Utilities"]
 
 [node name="VictoryText" parent="Utilities/VictoryScreen" instance=ExtResource("19_c0501")]
+unique_name_in_owner = true
 
 [node name="Shelf" type="Node" parent="."]
 
@@ -1897,10 +1898,10 @@ text = "NOW, ESCAPE FROM THE FACTORY!"
 [node name="Checkpoint" parent="." instance=ExtResource("5_luwg1")]
 position = Vector2(1733, -689)
 
-[node name="EndGameZone" type="Area2D" parent="." node_paths=PackedStringArray("player", "camera", "ui_victory_label")]
+[node name="EndGameZone" type="Area2D" parent="." node_paths=PackedStringArray("playerBody", "camera", "ui_victory_label")]
 position = Vector2(3997, 3225)
 script = ExtResource("20_pnsw4")
-player = NodePath("../Player")
+playerBody = NodePath("../Player")
 camera = NodePath("../Player/Camera2D")
 ui_victory_label = NodePath("../Utilities/VictoryScreen/VictoryText")
 
