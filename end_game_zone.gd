@@ -39,6 +39,8 @@ func _on_body_entered(body):
 func start_end_sequence():
 	print("Koniec gry! Odpalam sekwencję.")
 	
+	get_tree().call_group("GameTimer", "stop")
+	
 	# 0. Zapisanie rezultatów gry
 	save_game_results()
 	

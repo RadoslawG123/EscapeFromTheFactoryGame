@@ -53,7 +53,7 @@ theme_override_constants/outline_size = 20
 theme_override_font_sizes/font_size = 40
 text = "0"
 
-[node name="Timer" type="Timer" parent="."]
+[node name="Timer" type="Timer" parent="." groups=["GameTimer"]]
 autostart = true
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
