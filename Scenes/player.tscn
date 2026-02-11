@@ -208,7 +208,7 @@ script = ExtResource("1_cvnsp")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_vgqql")
-animation = &"WallSlide"
+animation = &"Idle"
 autoplay = "Idle"
 
 [node name="CollisionShape" type="CollisionShape2D" parent="."]
