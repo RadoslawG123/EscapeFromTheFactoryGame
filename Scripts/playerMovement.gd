@@ -83,6 +83,8 @@ func _physics_process(delta):
 	
 	if Input.is_action_just_pressed("reload"):
 		get_tree().reload_current_scene()
+	if Input.is_action_just_pressed("exit"):
+		get_tree().quit()
 	
 	## Spikes
 	#var tile_pos = tile_map.local_to_map(global_position)

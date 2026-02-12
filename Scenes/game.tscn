@@ -1144,7 +1144,7 @@ size = Vector2(141, 11)
 position = Vector2(4652, -126)
 metadata/_edit_horizontal_guides_ = [-194.0]
 
-[node name="Player" parent="." instance=ExtResource("1_ebmjs")]
+[node name="Player" parent="." groups=["Player"] instance=ExtResource("1_ebmjs")]
 unique_name_in_owner = true
 z_index = 5
 position = Vector2(-4666, 24)
@@ -1320,22 +1320,23 @@ loop = false
 
 [node name="Checkpoints" type="Node2D" parent="."]
 
-[node name="Checkpoint2" parent="Checkpoints" instance=ExtResource("7_1l0tm")]
-position = Vector2(5, -32)
-
-[node name="Checkpoint3" parent="Checkpoints" instance=ExtResource("7_1l0tm")]
-position = Vector2(2818, 64)
-
-[node name="Checkpoint4" parent="Checkpoints" instance=ExtResource("7_1l0tm")]
+[node name="Checkpoint1" parent="Checkpoints" instance=ExtResource("7_1l0tm")]
+visible = false
 position = Vector2(-4663, 32)
 
-[node name="Checkpoint5" parent="Checkpoints" instance=ExtResource("7_1l0tm")]
+[node name="Checkpoint2" parent="Checkpoints" instance=ExtResource("7_1l0tm")]
 position = Vector2(-3458, 0)
 
-[node name="Checkpoint6" parent="Checkpoints" instance=ExtResource("7_1l0tm")]
-position = Vector2(3961, 2048)
+[node name="Checkpoint3" parent="Checkpoints" instance=ExtResource("7_1l0tm")]
+position = Vector2(5, -32)
 
-[node name="Checkpoint" parent="Checkpoints" instance=ExtResource("7_1l0tm")]
+[node name="Checkpoint4" parent="Checkpoints" instance=ExtResource("7_1l0tm")]
+position = Vector2(1733, -689)
+
+[node name="Checkpoint5" parent="Checkpoints" instance=ExtResource("7_1l0tm")]
+position = Vector2(2818, 64)
+
+[node name="Checkpoint6" parent="Checkpoints" instance=ExtResource("7_1l0tm")]
 position = Vector2(4391, 192)
 
 [node name="Trigger" parent="." instance=ExtResource("11_fkdbe")]
@@ -1842,7 +1843,7 @@ script = ExtResource("8_h4fw4")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="Utilities"]
 
-[node name="GUI" parent="Utilities/CanvasLayer" node_paths=PackedStringArray("player") instance=ExtResource("6_i6g32")]
+[node name="GUI" parent="Utilities/CanvasLayer" node_paths=PackedStringArray("player") groups=["GUI"] instance=ExtResource("6_i6g32")]
 unique_name_in_owner = true
 player = NodePath("../../../Player")
 
@@ -1894,9 +1895,6 @@ text = "THIS IS YOUR FIRST CHECKPOINT!"
 position = Vector2(-3397, 1)
 scale = Vector2(0.5, 0.5)
 text = "NOW, ESCAPE FROM THE FACTORY!"
-
-[node name="Checkpoint" parent="." instance=ExtResource("7_1l0tm")]
-position = Vector2(1733, -689)
 
 [node name="EndGameZone" type="Area2D" parent="." node_paths=PackedStringArray("playerBody", "camera", "ui_victory_label")]
 position = Vector2(3997, 3225)

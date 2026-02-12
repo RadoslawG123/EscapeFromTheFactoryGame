@@ -1,10 +1,4 @@
-class_name SaverLoader
 extends Node
-
-## Instances
-@onready var player: Player = %Player
-@onready var gui: Control = %GUI
-
 
 func _ready() -> void:
 	if FileAccess.file_exists("user://savegame.tres"):
@@ -13,12 +7,18 @@ func _ready() -> void:
 		print("Game not load.")
 
 func _process(delta: float) -> void:
-	if Input.is_action_just_pressed("Save"):
+	if Input.is_action_just_pressed("exit"):
 		save_game()
-	if Input.is_action_just_pressed("Exit"):
-		load_game()
 
 func save_game():
+	## Instances
+	var player: Player = get_tree().get_first_node_in_group("Player")
+	var gui: Control = get_tree().get_first_node_in_group("GUI")
+	
+	## Checking if player and gui are rechable
+	if player == null or gui == null:
+		return
+	
 	var saved_game: SavedGame = SavedGame.new()
 
 	saved_game.checkpoint_position = player.checkpointPosition
@@ -26,8 +26,17 @@ func save_game():
 	saved_game.game_time = gui.seconds
 	
 	ResourceSaver.save(saved_game, "user://savegame.tres")
+	print("The game is saved!")
 	
 func load_game():
+	## Instances
+	var player: Player = get_tree().get_first_node_in_group("Player")
+	var gui: Control = get_tree().get_first_node_in_group("GUI")
+	
+	## Checking if player and gui are rechable
+	if player == null or gui == null:
+		return
+	
 	var saved_game:SavedGame = load("user://savegame.tres")
 	
 	player.position = saved_game.checkpoint_position
