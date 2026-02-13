@@ -76,6 +76,7 @@ func _physics_process(delta):
 	#print("isDashing: ", isDashing)
 	#print("canDash: ", canDash)
 	#print("state: ", state)
+
 	## Direction
 	var direction = Input.get_axis("move_left", "move_right")
 	if direction != 0 and state != States.WALL:
@@ -177,6 +178,9 @@ func _physics_process(delta):
 				
 		## Wall
 		States.WALL:
+			# Deactivate player velocity.y after jumping on the JumpPad
+			jumpPadActivate = false
+			
 			## Action - Jump
 			if Input.is_action_just_pressed("jump"):
 				doWallJump = true
