@@ -178,9 +178,6 @@ func _physics_process(delta):
 				
 		## Wall
 		States.WALL:
-			# Deactivate player velocity.y after jumping on the JumpPad
-			jumpPadActivate = false
-			
 			## Action - Jump
 			if Input.is_action_just_pressed("jump"):
 				doWallJump = true
@@ -274,6 +271,7 @@ func wall_slide(delta):
 
 func wall_jump(direction, delta):
 	doubleJumpActive = false
+	jumpPadActivate = false
 	
 	if raycasts():
 		print(prev_direction)
