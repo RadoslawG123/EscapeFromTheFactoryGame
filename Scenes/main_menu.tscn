@@ -1267,7 +1267,7 @@ position = Vector2(105.5, 249.5)
 visible = false
 position = Vector2(110.5, 248)
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+[node name="TitleTextAnimation" type="AnimationPlayer" parent="."]
 libraries = {
 &"": SubResource("AnimationLibrary_trj04")
 }

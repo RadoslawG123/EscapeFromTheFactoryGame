@@ -13,7 +13,7 @@ func _on_start_button_pressed() -> void:
 		dir.remove("savegame.tres")
 	
 	## Changing scene to "game"
-	get_tree().change_scene_to_file("res://Scenes/game.tscn")
+	get_tree().change_scene_to_file("res://Scenes/game_instructions_screen.tscn")
 
 ## Exit
 func _on_exit_button_pressed() -> void:
