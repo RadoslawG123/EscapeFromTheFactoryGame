@@ -1,10 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://vhb30ley867a"]
+[gd_scene load_steps=10 format=3 uid="uid://vhb30ley867a"]
 
-[ext_resource type="Texture2D" uid="uid://xnpney4t1nea" path="res://Assets/Others/Gerald's Keys/KeySample.png" id="1_8plkp"]
-[ext_resource type="Script" uid="uid://5jxbsb8pakqp" path="res://Scenes/game_instructions_screen.gd" id="1_usqun"]
+[ext_resource type="Script" uid="uid://5jxbsb8pakqp" path="res://Scenes/game_instructions_screen.gd" id="1_lhq4b"]
+[ext_resource type="Texture2D" uid="uid://xnpney4t1nea" path="res://Assets/Others/Gerald's Keys/KeySample.png" id="2_j61i7"]
+[ext_resource type="FontFile" uid="uid://7jhs4l160kqf" path="res://Assets/Fonts/bitByBit_ [font].ttf" id="3_1tapw"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_usqun"]
-texture = ExtResource("1_8plkp")
+texture = ExtResource("2_j61i7")
 texture_region_size = Vector2i(32, 32)
 0:0/0 = 0
 1:0/0 = 0
@@ -52,9 +53,6 @@ texture_region_size = Vector2i(32, 32)
 [sub_resource type="TileSet" id="TileSet_3nyu0"]
 sources/1 = SubResource("TileSetAtlasSource_usqun")
 
-[sub_resource type="Animation" id="Animation_8plkp"]
-resource_name = "TextInstructionsAnimation"
-
 [sub_resource type="Animation" id="Animation_usqun"]
 resource_name = "InstructionsTextAnimation"
 length = 4.0
@@ -87,6 +85,9 @@ tracks/0/keys = {
 "values": [Color(1, 1, 1, 1)]
 }
 
+[sub_resource type="Animation" id="Animation_8plkp"]
+resource_name = "TextInstructionsAnimation"
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_7bsvk"]
 _data = {
 &"InstructionsTextAnimation": SubResource("Animation_usqun"),
@@ -101,7 +102,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_usqun")
+script = ExtResource("1_lhq4b")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 layout_mode = 1
@@ -116,45 +117,59 @@ position = Vector2(7, 20)
 scale = Vector2(3, 3)
 tile_set = SubResource("TileSet_3nyu0")
 format = 2
-layer_0/tile_data = PackedInt32Array(327686, 196609, 4, 458756, 131073, 1, 458758, 393217, 3, 458760, 327681, 1, 458771, 393217, 2, 458766, 393217, 3)
+layer_0/tile_data = PackedInt32Array(327686, 196609, 4, 458756, 131073, 1, 458760, 327681, 1, 458765, 393217, 3, 458770, 393217, 2, 458758, 393217, 3)
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 0
-offset_left = 130.0
-offset_top = 441.0
-offset_right = 506.0
-offset_bottom = 496.0
-theme_override_font_sizes/font_size = 40
+offset_left = 137.0
+offset_top = 440.0
+offset_right = 513.0
+offset_bottom = 495.0
+pivot_offset = Vector2(188, 27.5)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("3_1tapw")
+theme_override_font_sizes/font_size = 35
 text = "MOVEMENT"
 horizontal_alignment = 1
 
 [node name="Label2" type="Label" parent="."]
 layout_mode = 0
-offset_left = 574.0
-offset_top = 440.0
-offset_right = 830.0
-offset_bottom = 495.0
-theme_override_font_sizes/font_size = 40
+offset_left = 528.0
+offset_top = 441.0
+offset_right = 792.0
+offset_bottom = 496.0
+pivot_offset = Vector2(132, 27.5)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("3_1tapw")
+theme_override_font_sizes/font_size = 35
 text = "CROUCH"
 horizontal_alignment = 1
 
 [node name="Label3" type="Label" parent="."]
 layout_mode = 0
-offset_left = 855.0
-offset_top = 438.0
-offset_right = 1031.0
-offset_bottom = 493.0
-theme_override_font_sizes/font_size = 40
+offset_left = 813.0
+offset_top = 442.0
+offset_right = 989.0
+offset_bottom = 497.0
+pivot_offset = Vector2(88, 27.5)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 10
+theme_override_fonts/font = ExtResource("3_1tapw")
+theme_override_font_sizes/font_size = 35
 text = "DASH"
 horizontal_alignment = 1
 
 [node name="Label4" type="Label" parent="."]
 layout_mode = 0
-offset_left = 323.0
-offset_top = 1.0
-offset_right = 852.0
-offset_bottom = 138.0
-theme_override_constants/outline_size = 0
+offset_left = 173.0
+offset_top = 32.0
+offset_right = 1033.0
+offset_bottom = 169.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 30
+theme_override_fonts/font = ExtResource("3_1tapw")
 theme_override_font_sizes/font_size = 100
 text = "Controls"
 horizontal_alignment = 1
@@ -162,13 +177,17 @@ uppercase = true
 
 [node name="Label5" type="Label" parent="."]
 layout_mode = 0
-offset_left = 426.0
-offset_top = 584.0
-offset_right = 736.0
-offset_bottom = 626.0
+offset_left = 290.0
+offset_top = 592.0
+offset_right = 861.0
+offset_bottom = 634.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 30
+theme_override_fonts/font = ExtResource("3_1tapw")
 theme_override_font_sizes/font_size = 28
 text = "Press any key to start"
 horizontal_alignment = 1
+uppercase = true
 
 [node name="TextAnimation" type="AnimationPlayer" parent="."]
 libraries = {

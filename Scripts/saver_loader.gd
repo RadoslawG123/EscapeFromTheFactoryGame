@@ -8,7 +8,7 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("exit"):
-		save_game()
+		get_tree().get_first_node_in_group("PauseMenuScreen").visible = true
 
 func save_game():
 	## Instances

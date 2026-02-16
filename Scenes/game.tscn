@@ -1,4 +1,4 @@
-[gd_scene load_steps=38 format=3 uid="uid://b3r2inpgd56h0"]
+[gd_scene load_steps=39 format=3 uid="uid://b3r2inpgd56h0"]
 
 [ext_resource type="PackedScene" uid="uid://d3h7eqgdb8th4" path="res://Scenes/player.tscn" id="1_ebmjs"]
 [ext_resource type="Texture2D" uid="uid://dw8yeht3eibs8" path="res://Assets/Tileset/factory_.png" id="2_qxrlw"]
@@ -19,6 +19,7 @@
 [ext_resource type="PackedScene" uid="uid://cgl6jax0widqj" path="res://Scenes/Obstacles/OB_BoxIII.tscn" id="14_cwurv"]
 [ext_resource type="PackedScene" uid="uid://ckfxpwxmy1a12" path="res://Scenes/Obstacles/OB_Spikes.tscn" id="15_mucmn"]
 [ext_resource type="PackedScene" uid="uid://cmeaqsnqakq1h" path="res://Scenes/victory_text.tscn" id="19_8m3t6"]
+[ext_resource type="PackedScene" uid="uid://cs8hkvm5o0dao" path="res://Scenes/pause_menu_screen.tscn" id="20_7t8sx"]
 [ext_resource type="PackedScene" uid="uid://fkietpy6nv67" path="res://Scenes/information_board.tscn" id="20_ese38"]
 [ext_resource type="Script" uid="uid://u0kjd2e3mqbj" path="res://end_game_zone.gd" id="21_oeip8"]
 
@@ -1851,6 +1852,12 @@ player = NodePath("../../../Player")
 
 [node name="VictoryText" parent="Utilities/VictoryScreen" instance=ExtResource("19_8m3t6")]
 unique_name_in_owner = true
+
+[node name="PauseMenuScreen" type="CanvasLayer" parent="Utilities"]
+
+[node name="PauseMenuScreen" parent="Utilities/PauseMenuScreen" groups=["PauseMenuScreen"] instance=ExtResource("20_7t8sx")]
+unique_name_in_owner = true
+visible = false
 
 [node name="Shelf" type="Node" parent="."]
 
