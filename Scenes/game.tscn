@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://b3r2inpgd56h0"]
+[gd_scene load_steps=40 format=3 uid="uid://b3r2inpgd56h0"]
 
 [ext_resource type="PackedScene" uid="uid://d3h7eqgdb8th4" path="res://Scenes/player.tscn" id="1_ebmjs"]
 [ext_resource type="Texture2D" uid="uid://dw8yeht3eibs8" path="res://Assets/Tileset/factory_.png" id="2_qxrlw"]
@@ -1138,6 +1138,12 @@ _data = {
 }
 point_count = 5
 
+[sub_resource type="Curve2D" id="Curve2D_7t8sx"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -204, -3, 0, 0, 0, 0, -205, 93, 0, 0, 0, 0, -60, 92, 0, 0, 0, 0, -60, -3, 0, 0, 0, 0, -204, -3)
+}
+point_count = 5
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_c0501"]
 size = Vector2(141, 11)
 
@@ -1213,11 +1219,16 @@ position = Vector2(-3085, 4)
 
 [node name="MB" type="Node2D" parent="MovingBlocks"]
 
+[node name="movingBlock" parent="MovingBlocks/MB" groups=["MovingBlocks"] instance=ExtResource("4_v158k")]
+position = Vector2(-2686, -406)
+scale = Vector2(0.75, 0.75)
+loop = false
+
 [node name="MB_B" type="Node2D" parent="MovingBlocks"]
 
 [node name="MB_Spikes" type="Node2D" parent="MovingBlocks"]
 
-[node name="movingBlock_spikes" parent="MovingBlocks/MB_Spikes" instance=ExtResource("6_mg4q0")]
+[node name="movingBlock_spikes" parent="MovingBlocks/MB_Spikes" groups=["MovingBlocks"] instance=ExtResource("6_mg4q0")]
 z_index = -1
 position = Vector2(3230, 56)
 scale = Vector2(0.7, 0.7)
@@ -1226,7 +1237,7 @@ loop = false
 speed_scale = 3.0
 progress_ratio = 1.0
 
-[node name="movingBlock_spikes4" parent="MovingBlocks/MB_Spikes" instance=ExtResource("6_mg4q0")]
+[node name="movingBlock_spikes4" parent="MovingBlocks/MB_Spikes" groups=["MovingBlocks"] instance=ExtResource("6_mg4q0")]
 z_index = -1
 position = Vector2(2949, -189)
 scale = Vector2(0.7, 0.7)
@@ -1234,7 +1245,7 @@ curve = SubResource("Curve2D_tctsc")
 loop = false
 speed_scale = 1.5
 
-[node name="movingBlock_spikes5" parent="MovingBlocks/MB_Spikes" instance=ExtResource("6_mg4q0")]
+[node name="movingBlock_spikes5" parent="MovingBlocks/MB_Spikes" groups=["MovingBlocks"] instance=ExtResource("6_mg4q0")]
 z_index = -1
 position = Vector2(2953, -328)
 scale = Vector2(0.7, 0.7)
@@ -1243,7 +1254,7 @@ loop = false
 speed_scale = 1.5
 progress_ratio = 1.0
 
-[node name="movingBlock_spikes2" parent="MovingBlocks/MB_Spikes" instance=ExtResource("6_mg4q0")]
+[node name="movingBlock_spikes2" parent="MovingBlocks/MB_Spikes" groups=["MovingBlocks"] instance=ExtResource("6_mg4q0")]
 z_index = -1
 position = Vector2(3230, 3)
 scale = Vector2(0.7, 0.7)
@@ -1252,7 +1263,7 @@ loop = false
 speed_scale = 3.0
 progress_ratio = 0.5
 
-[node name="movingBlock_spikes3" parent="MovingBlocks/MB_Spikes" instance=ExtResource("6_mg4q0")]
+[node name="movingBlock_spikes3" parent="MovingBlocks/MB_Spikes" groups=["MovingBlocks"] instance=ExtResource("6_mg4q0")]
 z_index = -1
 position = Vector2(3230, -50)
 scale = Vector2(0.7, 0.7)
@@ -1262,61 +1273,60 @@ speed_scale = 3.0
 
 [node name="MB_B_Spikes" type="Node2D" parent="MovingBlocks"]
 
-[node name="movingBlock_brown_spikes" parent="MovingBlocks/MB_B_Spikes" instance=ExtResource("7_vm72l")]
+[node name="movingBlock_brown_spikes" parent="MovingBlocks/MB_B_Spikes" groups=["MovingBlocks"] instance=ExtResource("7_vm72l")]
 position = Vector2(3169, -184)
 scale = Vector2(0.6, 0.6)
 curve = SubResource("Curve2D_ai2o8")
 loop = false
 speed_scale = 2.0
 
-[node name="movingBlock_brown_spikes2" parent="MovingBlocks/MB_B_Spikes" instance=ExtResource("7_vm72l")]
+[node name="movingBlock_brown_spikes2" parent="MovingBlocks/MB_B_Spikes" groups=["MovingBlocks"] instance=ExtResource("7_vm72l")]
 position = Vector2(-573, -98)
 scale = Vector2(0.8, 0.8)
 curve = SubResource("Curve2D_b8cfi")
 speed = 200.0
 
-[node name="movingBlock_brown_spikes3" parent="MovingBlocks/MB_B_Spikes" instance=ExtResource("7_vm72l")]
+[node name="movingBlock_brown_spikes3" parent="MovingBlocks/MB_B_Spikes" groups=["MovingBlocks"] instance=ExtResource("7_vm72l")]
 position = Vector2(-664, -174)
 scale = Vector2(0.8, 0.8)
 curve = SubResource("Curve2D_tihu5")
 loop = false
 speed_scale = 1.6
 
-[node name="movingBlock_brown_spikes4" parent="MovingBlocks/MB_B_Spikes" instance=ExtResource("7_vm72l")]
+[node name="movingBlock_brown_spikes4" parent="MovingBlocks/MB_B_Spikes" groups=["MovingBlocks"] instance=ExtResource("7_vm72l")]
 position = Vector2(-490, -158)
 scale = Vector2(0.8, 0.8)
 curve = SubResource("Curve2D_g1jyn")
 loop = false
 speed_scale = 2.0
 
-[node name="movingBlock_brown_spikes5" parent="MovingBlocks/MB_B_Spikes" instance=ExtResource("7_vm72l")]
+[node name="movingBlock_brown_spikes5" parent="MovingBlocks/MB_B_Spikes" groups=["MovingBlocks"] instance=ExtResource("7_vm72l")]
 position = Vector2(4155, 226)
 scale = Vector2(0.6, 0.6)
 curve = SubResource("Curve2D_pnsw4")
 loop = false
 
-[node name="movingBlock_brown_spikes6" parent="MovingBlocks/MB_B_Spikes" instance=ExtResource("7_vm72l")]
+[node name="movingBlock_brown_spikes6" parent="MovingBlocks/MB_B_Spikes" groups=["MovingBlocks"] instance=ExtResource("7_vm72l")]
 position = Vector2(4115, 184)
 scale = Vector2(0.6, 0.6)
 curve = SubResource("Curve2D_q6o5f")
 loop = false
 
-[node name="movingBlock_brown_spikes7" parent="MovingBlocks/MB_B_Spikes" instance=ExtResource("7_vm72l")]
+[node name="movingBlock_brown_spikes7" parent="MovingBlocks/MB_B_Spikes" groups=["MovingBlocks"] instance=ExtResource("7_vm72l")]
 position = Vector2(4168, 415)
 scale = Vector2(0.6, 0.6)
 curve = SubResource("Curve2D_c0501")
 speed = 250.0
 
+[node name="movingBlock_verticall_spikes" parent="MovingBlocks/MB_B_Spikes" groups=["MovingBlocks"] instance=ExtResource("8_22asu")]
+position = Vector2(-3190, -152)
+curve = SubResource("Curve2D_7t8sx")
+
 [node name="MB_B_VSpikes" type="Node2D" parent="MovingBlocks"]
 
-[node name="movingBlock_verticall_spikes" parent="MovingBlocks/MB_B_VSpikes" instance=ExtResource("8_22asu")]
+[node name="movingBlock_verticall_spikes" parent="MovingBlocks/MB_B_VSpikes" groups=["MovingBlocks"] instance=ExtResource("8_22asu")]
 position = Vector2(2754, -33)
 scale = Vector2(0.7, 0.7)
-loop = false
-
-[node name="movingBlock" parent="MovingBlocks" instance=ExtResource("4_v158k")]
-position = Vector2(-2686, -406)
-scale = Vector2(0.75, 0.75)
 loop = false
 
 [node name="Checkpoints" type="Node2D" parent="."]

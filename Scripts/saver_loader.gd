@@ -8,7 +8,28 @@ func _ready() -> void:
 
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("exit"):
+		## Instances
+		var playerBody: CharacterBody2D = get_tree().get_first_node_in_group("Player")
+		var anim_sprite = playerBody.get_node("AnimatedSprite2D")
+		var gui: Control = get_tree().get_first_node_in_group("GUI")
+		
+		# Show PauseMenuScreen
 		get_tree().get_first_node_in_group("PauseMenuScreen").visible = true
+		
+		# Stop the game timer
+		get_tree().call_group("GameTimer", "stop")
+		
+		# Disable player physics, controls and animation
+		anim_sprite.process_mode = Node.PROCESS_MODE_DISABLED
+		playerBody.set_physics_process(false)
+		
+		# Set player velocity to zero. Just to freeze him in place.
+		playerBody.velocity = Vector2.ZERO 
+		
+		# Freeze all moving blocks
+		for movingBlock in get_tree().get_nodes_in_group("MovingBlocks"):
+			movingBlock.stop_moving()
+		
 
 func save_game():
 	## Instances

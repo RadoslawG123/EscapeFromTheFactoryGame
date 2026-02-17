@@ -7,8 +7,8 @@ extends Path2D
 
 @onready var path: PathFollow2D = $PathFollow2D
 @onready var animation: AnimationPlayer = $AnimationPlayer
-@onready var path_curve: Path2D = $"."
 
+var prev_speed_scale := speed_scale
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -17,16 +17,18 @@ func _ready() -> void:
 		animation.play("move")
 		animation.seek(length * progress_ratio, true)
 		animation.speed_scale = speed_scale
-		path.progress_ratio = progress_ratio
+		start_moving()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	path.progress += speed * delta
 
-#func curve_length():
-	#var len: float = 0.0
-	#
-	#for i in range(0, path_curve.curve.point_count-1):
-		#len += sqrt( (path_curve.curve.get_point_position(i).x)**2 + (path_curve.curve.get_point_position(i).y)**2 )
-		#
-	#return len
+# Freeze moving blocks
+func stop_moving():
+	set_process(false)
+	animation.speed_scale = 0.0
+
+# Unfreeze moving blocks
+func start_moving():
+	set_process(true)
+	animation.speed_scale = speed_scale
