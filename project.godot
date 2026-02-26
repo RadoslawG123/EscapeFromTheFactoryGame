@@ -21,8 +21,10 @@ SaverLoader="*res://Scripts/saver_loader.gd"
 
 [display]
 
+window/size/mode=3
 window/size/always_on_top=true
-window/stretch/mode="viewport"
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
 
 [global_group]
 
@@ -33,6 +35,7 @@ Player=""
 GUI=""
 PauseMenuScreen=""
 MovingBlocks=""
+Camera=""
 
 [input]
 
