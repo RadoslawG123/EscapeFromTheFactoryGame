@@ -4,7 +4,7 @@
 
 ## 🎮 Gameplay Demo
 
-![Gameplay GIF](./Gameplay1.gif)
+![Gameplay GIF](./README/Gameplay1.gif)
 
 ## 🛠 Tech Stack
 
